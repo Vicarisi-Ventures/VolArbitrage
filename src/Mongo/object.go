@@ -23,16 +23,25 @@ type VolArbitrageData struct {
 	}
 
 	CallIV struct {
-		IV30  float64
-		IV60  float64
-		IV90  float64
-		IV120 float64
+		IV30        float64
+		IV60        float64
+		IV90        float64
+		IV120       float64
+		TailStrikes []float64
 	}
 
 	PutIV struct {
-		IV30  float64
-		IV60  float64
-		IV90  float64
-		IV120 float64
+		IV30        float64
+		IV60        float64
+		IV90        float64
+		IV120       float64
+		TailStrikes []float64
+	}
+
+	EM struct {
+		EM30  float64
+		EM60  float64
+		EM90  float64
+		EM120 float64
 	}
 }

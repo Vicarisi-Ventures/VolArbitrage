@@ -1,12 +1,14 @@
-package BlackScholes
+package ImpliedVolatility
 
-import "math"
+import (
+	"math"
+	b "v2/src/ImpliedVolatility/BlackScholes"
+)
 
 var max_iteration int = 10
 var error_tol float64 = 0.01
-var f64 float64 = float64(7.0)/3 - float64(4.0)/3 - float64(1.0)
 
-func GetImpliedVolatility(class BlackScholesParameters, option_price float64, option_type string) float64 {
+func GetImpliedVolatility(class b.BlackScholesParameters, option_price float64, option_type string) float64 {
 
 	iVol := GetHouseholderMethod(class, option_price, option_type)
 
@@ -14,7 +16,7 @@ func GetImpliedVolatility(class BlackScholesParameters, option_price float64, op
 
 }
 
-func getManasterKoehler(class BlackScholesParameters) float64 {
+func getManasterKoehler(class b.BlackScholesParameters) float64 {
 
 	/*
 	 * Formula Derived From: Manaster and Koehler (1982)

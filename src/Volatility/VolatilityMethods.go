@@ -14,6 +14,12 @@ func GetVolatilityMethods(class VolatilityMethodsParameters) VolatilityMethodsOb
 	v.RogersSatchell = getRogersSatchell(class)
 	v.YangZhang = getYangZhang(class)
 
+	// fmt.Println(len(v.CloseToClose))
+	// fmt.Println(len(v.Overnight))
+	// fmt.Println(len(v.Intraday))
+	// fmt.Println(len(v.RogersSatchell))
+	// fmt.Println(len(v.YangZhang))
+
 	return v
 
 }
@@ -25,12 +31,19 @@ func GetCloseToClose(class VolatilityMethodsParameters) []float64 {
 	var sd []float64
 	arr := getLogReturn(class.OHLC.Close)
 
-	for i := 0; i < (len(arr) - class.RollingPeriod); i++ {
+	for i := class.RollingPeriod; i < len(arr); i++ {
 
+		var mu float64
+
+		for j := i; j > (i - class.RollingPeriod); j-- {
+			mu += math.Pow(arr[j], 2)
+		}
+
+		mu = mu / float64(class.RollingPeriod)
 		var summation float64
 
-		for j := i; j < (i + class.RollingPeriod); j++ {
-			summation += math.Pow(arr[j], 2)
+		for j := i; j > (i - class.RollingPeriod); j-- {
+			summation += math.Pow(arr[j]-mu, 2)
 		}
 
 		variance := summation / float64(class.RollingPeriod)
@@ -198,18 +211,6 @@ func getYangZhang(class VolatilityMethodsParameters) []float64 {
 	}
 
 	return sd
-
-}
-
-func getAverage(price_data []float64) float64 {
-
-	var sum float64
-
-	for i := 0; i < len(price_data); i++ {
-		sum += price_data[i]
-	}
-
-	return sum / float64(len(price_data))
 
 }
 

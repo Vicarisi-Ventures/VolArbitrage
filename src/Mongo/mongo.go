@@ -2,11 +2,14 @@ package Mongo
 
 import (
 	"context"
+	"encoding/csv"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -36,6 +39,14 @@ func GetMongoConnection() *mongo.Client {
 func AppendMongo(client *mongo.Client, class VolArbitrageData, coll_name string) {
 
 	collection := client.Database("VolArbitrage").Collection(coll_name)
+
+	result, err := collection.DeleteMany(context.Background(), bson.D{})
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	fmt.Println(result)
 
 	currentTime := time.Now()
 
@@ -96,5 +107,77 @@ func AppendMongo(client *mongo.Client, class VolArbitrageData, coll_name string)
 	}
 
 	fmt.Println(insert)
+
+}
+
+func FetchMongoDB(client *mongo.Client, coll_name string) VolArbitrageData {
+
+	var VAD VolArbitrageData
+
+	collection := client.Database("VolArbitrage").Collection(coll_name)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	cursor, err := collection.Find(ctx, bson.M{})
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var iterations []bson.M
+	err = cursor.All(ctx, &iterations)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, itr := range iterations {
+
+		// Variance Risk Premium
+		VAD.VRP.VRP30 = itr["riskPremia"].(primitive.M)["vrp30"].(float64)
+		VAD.VRP.VRP60 = itr["riskPremia"].(primitive.M)["vrp60"].(float64)
+		VAD.VRP.VRP90 = itr["riskPremia"].(primitive.M)["vrp90"].(float64)
+		VAD.VRP.VRP120 = itr["riskPremia"].(primitive.M)["vrp120"].(float64)
+
+	}
+
+	return VAD
+
+}
+
+func GetStockTickers(isMain bool) []string {
+
+	var f *os.File
+	var err error
+
+	if isMain {
+		f, err = os.Open("Mongo/StockTickers.csv")
+
+	} else {
+		f, err = os.Open("StockTickers.csv")
+
+	}
+
+	if err != nil {
+		log.Fatal("Unable to read input file")
+	}
+	defer f.Close()
+
+	csvReader := csv.NewReader(f)
+	records, err := csvReader.ReadAll()
+
+	if err != nil {
+		log.Fatal("Unable to parse file as CSV")
+	}
+
+	var tickers []string
+	for i := 0; i < len(records); i++ {
+
+		tickers = append(tickers, records[i][0])
+
+	}
+
+	return tickers
 
 }

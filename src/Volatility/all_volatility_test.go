@@ -17,7 +17,7 @@ func TestVolatilityMethods(t *testing.T) {
 	// Initialize Tradier Client
 	client := tradier.NewTradierClient(api_key, account_id)
 
-	historical, err := client.GetHistoricalData("AAPL")
+	historical, err := client.GetHistoricalData("SPY")
 
 	if err != nil {
 		log.Println("Error Fetching Historical Data")
@@ -35,16 +35,16 @@ func TestVolatilityMethods(t *testing.T) {
 	}
 
 	VMP.RollingPeriod = 30
-	hv30 := GetVolatilityMethods(VMP).CloseToClose[(length - VMP.RollingPeriod - 3)]
+	hv30 := GetVolatilityMethods(VMP).YangZhang[(length - VMP.RollingPeriod - 3)]
 
 	VMP.RollingPeriod = 60
-	hv60 := GetVolatilityMethods(VMP).CloseToClose[(length - VMP.RollingPeriod - 3)]
+	hv60 := GetVolatilityMethods(VMP).YangZhang[(length - VMP.RollingPeriod - 3)]
 
 	VMP.RollingPeriod = 90
-	hv90 := GetVolatilityMethods(VMP).CloseToClose[(length - VMP.RollingPeriod - 3)]
+	hv90 := GetVolatilityMethods(VMP).YangZhang[(length - VMP.RollingPeriod - 3)]
 
 	VMP.RollingPeriod = 120
-	hv120 := GetVolatilityMethods(VMP).CloseToClose[(length - VMP.RollingPeriod - 3)]
+	hv120 := GetVolatilityMethods(VMP).YangZhang[(length - VMP.RollingPeriod - 3)]
 
 	fmt.Println("Historical Volatility Metrics")
 	fmt.Println("HV30: ", hv30)

@@ -25,7 +25,7 @@ func getManasterKoehler(class b.BlackScholesParameters) float64 {
 	 * Additionally, it will require fewer iterations to converge to the root.
 	 */
 
-	abs := math.Abs(math.Log(class.Stock/class.Strike)) + class.Stochastic_drift*class.Expiry
+	abs := math.Abs(math.Log(class.Stock/class.Strike)) + (class.Stochastic_drift * class.Expiry)
 
 	return math.Sqrt(abs * (2.0 * class.Expiry))
 

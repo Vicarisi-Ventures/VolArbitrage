@@ -27,10 +27,10 @@ func TestVolatilityMethods(t *testing.T) {
 
 	for j := 0; j < length; j++ {
 
-		VMP.OHLC.Open = append(VMP.OHLC.Open, historical.History.Day[j].Open)
-		VMP.OHLC.High = append(VMP.OHLC.High, historical.History.Day[j].High)
-		VMP.OHLC.Low = append(VMP.OHLC.Low, historical.History.Day[j].Low)
-		VMP.OHLC.Close = append(VMP.OHLC.Close, historical.History.Day[j].Close)
+		VMP.Open = append(VMP.Open, historical.History.Day[j].Open)
+		VMP.High = append(VMP.High, historical.History.Day[j].High)
+		VMP.Low = append(VMP.Low, historical.History.Day[j].Low)
+		VMP.Close = append(VMP.Close, historical.History.Day[j].Close)
 
 	}
 

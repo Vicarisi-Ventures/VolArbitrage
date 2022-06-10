@@ -29,7 +29,7 @@ func GetVolatilityMethods(class VolatilityMethodsParameters) VolatilityMethodsOb
 func GetCloseToClose(class VolatilityMethodsParameters) []float64 {
 
 	var sd []float64
-	arr := getLogReturn(class.OHLC.Close)
+	arr := getLogReturn(class.Close)
 
 	for i := class.RollingPeriod; i < len(arr); i++ {
 
@@ -63,10 +63,10 @@ func getOvernightVol(class VolatilityMethodsParameters) []float64 {
 	var sd []float64
 	var arr []float64
 
-	for i := 0; i < len(class.OHLC.Open); i++ {
+	for i := 0; i < len(class.Open); i++ {
 
 		if i > 0 {
-			arr = append(arr, (class.OHLC.Open[i] / class.OHLC.Close[i-1]))
+			arr = append(arr, (class.Open[i] / class.Close[i-1]))
 		}
 
 	}
@@ -105,10 +105,10 @@ func getIntraDayVol(class VolatilityMethodsParameters) []float64 {
 	var sd []float64
 	var arr []float64
 
-	for i := 0; i < len(class.OHLC.Open); i++ {
+	for i := 0; i < len(class.Open); i++ {
 
 		if i > 0 {
-			arr = append(arr, (class.OHLC.Close[i] / class.OHLC.Open[i]))
+			arr = append(arr, (class.Close[i] / class.Open[i]))
 		}
 
 	}
@@ -150,12 +150,12 @@ func getRogersSatchell(class VolatilityMethodsParameters) []float64 {
 	var lc []float64
 	var lo []float64
 
-	for i := 0; i < len(class.OHLC.Close); i++ {
+	for i := 0; i < len(class.Close); i++ {
 
-		hc = append(hc, class.OHLC.High[i]/class.OHLC.Close[i])
-		ho = append(ho, class.OHLC.High[i]/class.OHLC.Open[i])
-		lc = append(lc, class.OHLC.Low[i]/class.OHLC.Close[i])
-		lo = append(lo, class.OHLC.Low[i]/class.OHLC.Open[i])
+		hc = append(hc, class.High[i]/class.Close[i])
+		ho = append(ho, class.High[i]/class.Open[i])
+		lc = append(lc, class.Low[i]/class.Close[i])
+		lo = append(lo, class.Low[i]/class.Open[i])
 
 	}
 

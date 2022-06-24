@@ -134,10 +134,6 @@ func GetVolatilityMetrics(client *t.TradierClient, mongo *mongo.Client) {
 				OC = append(OC, oc)
 			}
 
-			if err != nil {
-				log.Println("Error Fetching Option Chain")
-			}
-
 			var atm_iv []float64
 
 			// Compute ATM Implied Volatility
@@ -429,8 +425,7 @@ func GetVolatilityMetrics(client *t.TradierClient, mongo *mongo.Client) {
 
 		count++
 
-		if count == (499) {
-			fmt.Println("Screener has Terminated")
+		if count == len(ticker_symbols) {
 			return
 		}
 

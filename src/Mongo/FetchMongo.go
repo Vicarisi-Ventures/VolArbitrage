@@ -24,14 +24,14 @@ func FetchVolatilityMongoDB(client *mongo.Client, coll_name string) VolArbitrage
 	cursor, err := collection.Find(ctx, bson.M{})
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	var iterations []bson.M
 	err = cursor.All(ctx, &iterations)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	for _, itr := range iterations {
@@ -72,14 +72,14 @@ func FetchHistoricalMongoDB(client *mongo.Client, coll_name string) v.Volatility
 	cursor, err := collection.Find(ctx, bson.M{})
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	var iterations []bson.M
 	err = cursor.All(ctx, &iterations)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	for _, itr := range iterations {
@@ -99,7 +99,7 @@ func FetchHistoricalMongoDB(client *mongo.Client, coll_name string) v.Volatility
 
 }
 
-func FetchCorrelationMongoDB(client *mongo.Client, coll_name string, pair_name string) [4]float64 {
+func FetchCorrelationMongoDB(client *mongo.Client, coll_name string, pair_name string, index int) [4]float64 {
 
 	var arr [4]float64
 
@@ -111,24 +111,27 @@ func FetchCorrelationMongoDB(client *mongo.Client, coll_name string, pair_name s
 	cursor, err := collection.Find(ctx, bson.M{})
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
 	var iterations []bson.M
 	err = cursor.All(ctx, &iterations)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 
-	for _, itr := range iterations {
+	itr := iterations[index]
 
-		arr[0] = itr[pair_name].(primitive.M)["open"].(float64)
-		arr[1] = itr[pair_name].(primitive.M)["high"].(float64)
-		arr[2] = itr[pair_name].(primitive.M)["low"].(float64)
-		arr[3] = itr[pair_name].(primitive.M)["close"].(float64)
+	// fmt.Println("Correlation: ", itr[pair_name].(primitive.M)["open"].(float64))
+	// fmt.Println("Correlation: ", itr[pair_name].(primitive.M)["high"].(float64))
+	// fmt.Println("Correlation: ", itr[pair_name].(primitive.M)["low"].(float64))
+	// fmt.Println("Correlation: ", itr[pair_name].(primitive.M)["close"].(float64))
 
-	}
+	arr[0] = itr[pair_name].(primitive.M)["open"].(float64)
+	arr[1] = itr[pair_name].(primitive.M)["high"].(float64)
+	arr[2] = itr[pair_name].(primitive.M)["low"].(float64)
+	arr[3] = itr[pair_name].(primitive.M)["close"].(float64)
 
 	return arr
 

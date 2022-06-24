@@ -6,7 +6,7 @@ import (
 )
 
 var max_iteration int = 10
-var error_tol float64 = 0.01
+var error_tol float64 = 0.001
 
 func GetImpliedVolatility(class b.BlackScholesParameters, option_price float64, option_type string) float64 {
 

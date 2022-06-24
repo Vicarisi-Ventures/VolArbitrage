@@ -5,6 +5,40 @@ import (
 	"testing"
 )
 
+func TestMongoDBCorrelation(t *testing.T) {
+
+	ticker := "MRVL"
+	client := GetMongoConnection()
+
+	ticker_symbols := GetStockTickers(false)
+	var correlation []float64
+
+	for i := 0; i < (len(ticker_symbols) - 1); i++ {
+
+		pair := ticker_symbols[i]
+		correlation = append(correlation, FetchCorrelationMongoDB(client, ticker, ticker+"-"+pair, i)[3])
+
+	}
+
+	index, top_five_correlation := findTopFive(correlation)
+	var top_tickers []string
+
+	for i := 0; i < 5; i++ {
+		top_tickers = append(top_tickers, ticker_symbols[index[i]])
+	}
+
+	fmt.Println("*** Top Five Highest Correlation ***")
+	for i := 0; i < 5; i++ {
+
+		fmt.Println("Trade: ", i)
+		fmt.Println("Risk Premium: ", top_five_correlation[i])
+		fmt.Println("Ticker Symbol: ", top_tickers[i])
+		fmt.Println("")
+
+	}
+
+}
+
 func TestMongoDB(t *testing.T) {
 
 	client := GetMongoConnection()

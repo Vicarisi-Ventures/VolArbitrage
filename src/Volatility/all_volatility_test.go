@@ -17,7 +17,7 @@ func TestVolatilityMethods(t *testing.T) {
 	// Initialize Tradier Client
 	client := tradier.NewTradierClient(api_key, account_id)
 
-	historical, err := client.GetHistoricalData("SPY")
+	historical, err := client.GetHistoricalData("LCID")
 
 	if err != nil {
 		log.Println("Error Fetching Historical Data")

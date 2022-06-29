@@ -35,13 +35,13 @@ func main() {
 	s.GetCorrelationMetrics(mongo)
 
 	// Fetch Top Five Variance Risk Premium
-	var vrp_tickers []string
+	// var vrp_tickers []string
 
 	// Fetch Top Five Call Skew
 
 	// Fetch Top Five Put Skew
 
 	// Run Tickers Through Butterfly Screener
-	s.GetButterflyMetrics(client, vrp_tickers)
+	// s.GetButterflyMetrics(client, vrp_tickers)
 
 }

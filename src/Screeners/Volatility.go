@@ -112,8 +112,7 @@ func GetVolatilityMetrics(client *t.TradierClient, mongo *mongo.Client) {
 
 			for j := 0; j < len(expiry.Expirations.Dates); j++ {
 
-				tau := b.GetDaysBetween(time.Now(), expiry.Expirations.Dates[j])
-				tau /= 365.0
+				tau := b.GetDaysBetween(time.Now(), expiry.Expirations.Dates[j]) / 365.0
 				dte = append(dte, tau)
 
 			}

@@ -8,6 +8,18 @@ import (
 	"time"
 )
 
+func (client *TradierClient) GetQuote(ticker string) (QuoteChain, error) {
+
+	resp, err := client._get("/markets/quotes?symbols="+ticker+"&greeks=false", []byte(""))
+
+	var response QuoteChain
+
+	err = client.handleReponse(resp, &response)
+
+	return response, err
+
+}
+
 func (client *TradierClient) GetHistoricalData(ticker string) (HistoricalData, error) {
 
 	current_time := time.Now()

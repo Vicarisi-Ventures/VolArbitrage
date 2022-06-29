@@ -14,7 +14,7 @@ func AdaptiveBoole(lower float64, upper float64) float64 {
 		Fast Numerical Integration Routine for Smooth Functions
 	*/
 
-	err_tol := 0.01
+	err_tol := 0.001
 	m := (lower + upper) / 2.0
 
 	lm := (m + lower) / 2.0

@@ -75,7 +75,7 @@ func GetSecondOrderGreeks(class BlackScholesParameters) SecondOrderGreeks {
 	greeks.Vanna = -math.Exp(-(class.Dividends * class.Expiry)) * n.GaussianDistribution(d.D1, 0, 1) * d.D2 / class.Implied_volatility
 	greeks.CallCharm = class.Dividends*math.Exp(-(class.Dividends*class.Expiry))*n.AdaptiveBoole(-5, d.D1) - math.Exp(-(class.Dividends*class.Expiry))*n.GaussianDistribution(d.D1, 0, 1)*(2*-class.Dividends*class.Expiry-d.D2*class.Implied_volatility*math.Sqrt(class.Expiry)/2*class.Expiry*class.Implied_volatility*math.Sqrt(class.Expiry))
 	greeks.PutCharm = -class.Dividends*math.Exp(-(class.Dividends*class.Expiry))*n.AdaptiveBoole(-5, -d.D1) - math.Exp(-(class.Dividends*class.Expiry))*n.GaussianDistribution(d.D1, 0, 1)*(2*-class.Dividends*class.Expiry-d.D2*class.Implied_volatility*math.Sqrt(class.Expiry)/2*class.Expiry*class.Implied_volatility*math.Sqrt(class.Expiry))
-	greeks.Vomma = class.Stock * math.Exp(-(class.Dividends * class.Expiry)) * n.GaussianDistribution(d.D1, 0, 1) * math.Sqrt(class.Expiry) * d.D1 * d.D2 / class.Implied_volatility
+	greeks.Vomma = class.Stock * math.Exp(-(class.Dividends * class.Expiry)) * n.GaussianDistribution(d.D1, 0, 1) * math.Sqrt(class.Expiry) * (d.D1 * d.D2 / class.Implied_volatility)
 	greeks.Veta = -class.Stock * math.Exp(-(class.Dividends * class.Expiry)) * n.GaussianDistribution(d.D1, 0, 1) * math.Sqrt(class.Expiry) * (class.Dividends + (-class.Dividends * d.D1 / class.Implied_volatility * math.Sqrt(class.Expiry)) - ((1 + d.D1*d.D2) / 2 * class.Expiry))
 
 	return greeks

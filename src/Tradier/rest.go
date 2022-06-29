@@ -25,3 +25,12 @@ func (client *TradierClient) _get(path string, body []byte) (*http.Response, err
 	return resp, err
 
 }
+
+func (client *TradierClient) _post(path string, body []byte) (*http.Response, error) {
+
+	preparedRequest := client.signRequest("POST", path, body)
+
+	resp, err := client.Client.Do(preparedRequest)
+
+	return resp, err
+}

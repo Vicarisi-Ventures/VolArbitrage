@@ -20,7 +20,7 @@ func GetStockTickers(isMain bool) []string {
 	}
 
 	if err != nil {
-		log.Fatal("Unable to read input file")
+		log.Fatal("Unable to read stock tickers input file")
 	}
 	defer f.Close()
 

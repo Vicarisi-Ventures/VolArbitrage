@@ -34,25 +34,46 @@ func FetchVolatilityMongoDB(client *mongo.Client, coll_name string) VolArbitrage
 		log.Println(err)
 	}
 
-	for _, itr := range iterations {
+	if coll_name != "FB" {
 
-		// Variance Risk Premium
-		VAD.VRP.VRP30 = itr["riskPremia"].(primitive.M)["vrp30"].(float64)
-		VAD.VRP.VRP60 = itr["riskPremia"].(primitive.M)["vrp60"].(float64)
-		VAD.VRP.VRP90 = itr["riskPremia"].(primitive.M)["vrp90"].(float64)
-		VAD.VRP.VRP120 = itr["riskPremia"].(primitive.M)["vrp120"].(float64)
+		for _, itr := range iterations {
 
-		// Call Skew
-		VAD.CallIV.IV30 = itr["callSkew"].(primitive.M)["cs30"].(float64)
-		VAD.CallIV.IV60 = itr["callSkew"].(primitive.M)["cs60"].(float64)
-		VAD.CallIV.IV90 = itr["callSkew"].(primitive.M)["cs90"].(float64)
-		VAD.CallIV.IV120 = itr["callSkew"].(primitive.M)["cs120"].(float64)
+			// Realized Volatility
+			for i := 0; i < len(itr["historical"].(primitive.M)["hv30"].(primitive.A)); i++ {
+				VAD.HV.HV30 = append(VAD.HV.HV30, itr["historical"].(primitive.M)["hv30"].(primitive.A)[i].(float64))
+			}
 
-		// Put Skew
-		VAD.PutIV.IV30 = itr["putSkew"].(primitive.M)["ps30"].(float64)
-		VAD.PutIV.IV60 = itr["putSkew"].(primitive.M)["ps60"].(float64)
-		VAD.PutIV.IV90 = itr["putSkew"].(primitive.M)["ps90"].(float64)
-		VAD.PutIV.IV120 = itr["putSkew"].(primitive.M)["ps120"].(float64)
+			for i := 0; i < len(itr["historical"].(primitive.M)["hv60"].(primitive.A)); i++ {
+				VAD.HV.HV60 = append(VAD.HV.HV60, itr["historical"].(primitive.M)["hv60"].(primitive.A)[i].(float64))
+			}
+
+			for i := 0; i < len(itr["historical"].(primitive.M)["hv90"].(primitive.A)); i++ {
+				VAD.HV.HV90 = append(VAD.HV.HV90, itr["historical"].(primitive.M)["hv90"].(primitive.A)[i].(float64))
+			}
+
+			for i := 0; i < len(itr["historical"].(primitive.M)["hv120"].(primitive.A)); i++ {
+				VAD.HV.HV120 = append(VAD.HV.HV120, itr["historical"].(primitive.M)["hv120"].(primitive.A)[i].(float64))
+			}
+
+			// Variance Risk Premium
+			VAD.VRP.VRP30 = itr["riskPremia"].(primitive.M)["vrp30"].(float64)
+			VAD.VRP.VRP60 = itr["riskPremia"].(primitive.M)["vrp60"].(float64)
+			VAD.VRP.VRP90 = itr["riskPremia"].(primitive.M)["vrp90"].(float64)
+			VAD.VRP.VRP120 = itr["riskPremia"].(primitive.M)["vrp120"].(float64)
+
+			// Call Skew
+			VAD.CallIV.IV30 = itr["callSkew"].(primitive.M)["cs30"].(float64)
+			VAD.CallIV.IV60 = itr["callSkew"].(primitive.M)["cs60"].(float64)
+			VAD.CallIV.IV90 = itr["callSkew"].(primitive.M)["cs90"].(float64)
+			VAD.CallIV.IV120 = itr["callSkew"].(primitive.M)["cs120"].(float64)
+
+			// Put Skew
+			VAD.PutIV.IV30 = itr["putSkew"].(primitive.M)["ps30"].(float64)
+			VAD.PutIV.IV60 = itr["putSkew"].(primitive.M)["ps60"].(float64)
+			VAD.PutIV.IV90 = itr["putSkew"].(primitive.M)["ps90"].(float64)
+			VAD.PutIV.IV120 = itr["putSkew"].(primitive.M)["ps120"].(float64)
+
+		}
 
 	}
 

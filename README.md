@@ -3,6 +3,7 @@
 ## Feature Set
 
     - High Performance Volatility Arbitrage Infrastructure
+    - Cross Platform GUI
 
 ## Black Scholes Model
 

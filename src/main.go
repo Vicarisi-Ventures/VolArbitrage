@@ -1,68 +1,95 @@
 package main
 
 import (
-	"log"
-
+	"fmt"
 	m "v2/src/Mongo"
 	s "v2/src/Screeners"
 	t "v2/src/Tradier"
 
-	"fyne.io/fyne/app"
-	"fyne.io/fyne/container"
-	"fyne.io/fyne/widget"
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
+
+	FE "v2/src/FrontEnd"
 )
 
+var arr []string
+
 func main() {
+
+	// runScreeners()
+	// os.Exit(0)
 
 	a := app.New()
 	w := a.NewWindow("Vicarisi Ventures: Volatility Arbitrage")
 	w.CenterOnScreen()
 	w.Padded()
 
+	r, _ := FE.LoadResourceFromPath("C:/Users/18627/Documents/GitHub/VolArbitrage/Icon.png")
+	w.SetIcon(r)
+
+	c1 := make(chan *fyne.Container, 1)
+	c2 := make(chan []string, 1)
+
+	go FE.LoginPanel(c1, c2)
+
+	initial_content := <-c1
+	w.SetContent(initial_content)
+
+	arr = <-c2
+
+	fmt.Println("Starting")
+	arbitrage_panel := FE.ScreenerPanel()
+	contango_panel := FE.ContangoPanel()
+	simulation_panel := FE.SimulationPanel()
+	volatility_panel := FE.ImpliedVolatilityPanel()
+
+	// App Tabs
+	tabs := container.NewAppTabs(
+
+		container.NewTabItem("Arbitrage Screener", container.NewVBox(
+
+			arbitrage_panel,
+		)),
+
+		container.NewTabItem("Contango Backtest Engine", container.NewVBox(
+
+			contango_panel,
+		)),
+
+		container.NewTabItem("Stochastic Simulation Engine", container.NewVBox(
+
+			simulation_panel,
+		)),
+
+		container.NewTabItem("Volatility Curve", container.NewVBox(
+
+			volatility_panel,
+		)),
+	)
+	fmt.Println("Done")
+
+	w.SetContent(tabs)
+	w.ShowAndRun()
+
+}
+
+func runScreeners() {
+
 	// Enter Api Key
 	var api_key string
-	api_label := widget.NewLabel("Enter Api Key: ")
-	api_input := widget.NewEntry()
-	api_input.SetPlaceHolder("Enter text...")
+	fmt.Println("Enter Api Key: ")
+	fmt.Scanln(&api_key)
+	fmt.Println("")
 
 	// Enter Account ID
 	var account_id string
-	account_label := widget.NewLabel("Enter Account ID: ")
-	account_input := widget.NewEntry()
-	account_input.SetPlaceHolder("Enter text...")
-
-	initial_content := container.NewVBox(
-
-		api_label,
-
-		api_input, widget.NewButton("Enter",
-			func() {
-
-				api_key = api_input.Text
-				log.Println("Api Key:", api_input.Text)
-
-			}),
-
-		account_label,
-
-		account_input, widget.NewButton("Enter",
-			func() {
-
-				account_id = account_input.Text
-				log.Println("Account ID:", account_input.Text)
-
-			}),
-	)
-
-	w.SetContent(initial_content)
-
-	secondary_content := container.NewVBox()
-
-	w.SetContent(secondary_content)
-
-	w.ShowAndRun()
+	fmt.Println("Enter Account ID: ")
+	fmt.Scanln(&account_id)
+	fmt.Println("")
 
 	// Initialize Tradier Client
+	// client := t.NewTradierClient(arr[0], arr[1])
 	client := t.NewTradierClient(api_key, account_id)
 
 	// Initialize Mongo Client

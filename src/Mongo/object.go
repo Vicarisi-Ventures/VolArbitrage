@@ -2,10 +2,10 @@ package Mongo
 
 type VolArbitrageData struct {
 	HV struct {
-		HV30  float64
-		HV60  float64
-		HV90  float64
-		HV120 float64
+		HV30  []float64
+		HV60  []float64
+		HV90  []float64
+		HV120 []float64
 	}
 
 	IV struct {
